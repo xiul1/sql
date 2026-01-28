@@ -320,3 +320,6 @@ SELECT d.department_name, COUNT(*) AS "n_impiegati"
 FROM departments d, employees e
 WHERE d.ID=e.IDdepartments
 GROUP BY d.ID;
+
+
+hehehe
