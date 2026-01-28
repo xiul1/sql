@@ -322,4 +322,3 @@ WHERE d.ID=e.IDdepartments
 GROUP BY d.ID;
 
 
-hehehe
