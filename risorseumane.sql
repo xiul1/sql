@@ -307,9 +307,6 @@ WHERE c.country_id IS NULL
 ORDER BY c.country_id;
 
 
-
-
-
 --11. mostrare region, country e le relative locations di quei country che hanno i codici IT, DE, CA e relative locations
 SELECT r.region_name, c.country_name, l.location_id
 FROM regions r, countries c, locations l
