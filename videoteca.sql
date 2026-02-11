@@ -167,4 +167,66 @@ INSERT INTO `Regista` (`ID`, `Nome`, `Cognome`) VALUES
 --
 -- Indici per le tabelle scaricate
 --
---1)
+--1) Quali sono i film appartenenti al genere "azione"?
+SELECT F.Titolo
+FROM Film F, Genere G
+WHERE F.IDGenere = G.ID AND G.Descrizione = 'azione';
+
+--2) Visualizzare tutti i film realizzati dopo il 2009
+SELECT Titolo
+FROM Film
+WHERE Anno > 2009;
+
+--3) elencare tutti i film costati più di 600000 euro
+SELECT Titolo
+FROM Film
+WHERE Costo > 600000;
+
+--4) elencare tutti i film che iniziano con la lettera L
+SELECT Titolo
+FROM Film
+WHERE Titolo LIKE 'l%';
+
+--5) visualizzare tutti gli attori in ordine alfabetico
+SELECT Nome, Cognome
+FROM Attore
+ORDER BY Cognome;
+
+--6) visualiozzare tutte le nazioni di provenienza degli attori.Ciascuna nazione deve essere visualizzata una sola volta
+SELECT DISTINCT N.Nome
+FROM Nazione N, Attore A
+WHERE A.IDNazione = N.ID;
+
+--7) quali sono gli attori spagnoli?
+SELECT A.Nome, A.Cognome
+FROM Attore A, Nazione N
+WHERE A.IDNazione = N.ID 
+AND N.Nome = 'spagna';
+
+--8)quali sono i film interpretati da particolare attore?
+SELECT F.Titolo
+FROM Film F, Interpreta I, Attore A
+WHERE F.ID = I.IDFilm 
+AND I.IDAttore = A.ID 
+AND A.Nome = :Nome 
+AND A.Cognome = :Cognome;
+
+--9)quati sono i film proddotti da un registra
+SELECT COUNT(*)
+FROM Film F, Regista R
+WHERE F.IDRegista = R.ID
+AND R.Nome = :Nome
+AND R.Cognome = :Cognome;
+
+--10)quanti sono i film presenti nel DB?
+SELECT COUNT(ID) AS "numerifilm"
+FROM Film;
+
+--11) durata media dei film di ogni attore
+SELECT A.Nome, A.Cognome, AVG(F.Durata) AS "duratamedia"
+FROM Attore A, Interpreta I, Film F
+WHERE A.ID = I.IDAttore
+AND I.IDFilm = F.ID
+GROUP BY A.ID;
+
+
