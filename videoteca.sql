@@ -1,4 +1,4 @@
--- Active: 1769426276789@@127.0.0.1@3306@Videoteca
+-- Active: 1770925034703@@127.0.0.1@3306@Videoteca
 -- --------------------------------------------------------
 
 --
@@ -178,7 +178,7 @@ FROM Film
 WHERE Anno > 2009;
 
 --3) elencare tutti i film costati più di 600000 euro
-SELECT Titolo
+SELECT Titolo,`Costo`
 FROM Film
 WHERE Costo > 600000;
 
@@ -192,13 +192,13 @@ SELECT Nome, Cognome
 FROM Attore
 ORDER BY Cognome;
 
---6) visualiozzare tutte le nazioni di provenienza degli attori.Ciascuna nazione deve essere visualizzata una sola volta
+--6) visualizzare tutte le nazioni di provenienza degli attori.Ciascuna nazione deve essere visualizzata una sola volta
 SELECT DISTINCT N.Nome
 FROM Nazione N, Attore A
 WHERE A.IDNazione = N.ID;
 
 --7) quali sono gli attori spagnoli?
-SELECT A.Nome, A.Cognome
+SELECT A.Nome, A.Cognome, N.Nome
 FROM Attore A, Nazione N
 WHERE A.IDNazione = N.ID 
 AND N.Nome = 'spagna';
@@ -229,4 +229,29 @@ WHERE A.ID = I.IDAttore
 AND I.IDFilm = F.ID
 GROUP BY A.ID;
 
+--12)Per ogni genere cinematografico calcola il numero di film, la durata media e il costo totale. Mostra solo i generi con almeno 2 film.
+SELECT G.Descrizione, COUNT(F.ID) AS "numfilm", AVG(F.Durata) AS "duratamedia", SUM(F.Costo) AS "costototale"
+FROM Genere G, Film F
+WHERE G.ID = F.IDGenere
+GROUP BY G.ID
+HAVING COUNT(F.ID) >= 2;
+
+INSERT INTO `Regista` (`ID`, `Nome`, `Cognome`) VALUES
+(8, 'Guidotti', 'francisco');
+--13)Visualizza nome e cognome di tutti i registi con i titoli dei film da loro diretti. I registi senza film nel database devono comparirecomunque (titolo NULL).
+SELECT `R`.`Nome`,R.`Cognome`,F.Titolo
+FROM `Regista` R LEFT JOIN `Film` F ON F.IDRegista = R.ID;
+
+--14)Per ogni film mostra titolo, anno, nome/cognome del regista e nome/cognome di ogni attore. Ordina per anno decrescente.
+SELECT f.`Titolo`,f.`Anno`,r.`Nome`,r.`Cognome`,a.`Nome`,a.`Cognome`
+FROM `Film` f, `Regista` r, `Interpreta` i, `Attore` a
+WHERE f.IDRegista = r.ID
+AND f.ID = i.IDFilm
+AND i.IDAttore = a.ID
+ORDER BY f.Anno DESC;
+
+--15)Elenca il titolo e la durata dei film la cui durata è superiore alla durata media calcolata su tutti i film del database.
+SELECT f.`Titolo`,ROUND(f.`Durata`)
+FROM `Film` f
+WHERE f.`Durata`>(SELECT AVG(Durata) FROM `Film`);
 
